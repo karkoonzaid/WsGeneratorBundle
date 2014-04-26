@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+{% block body %}
+    <route id="{{ route_name_prefix }}" pattern="/">
+        <default key="_controller">FrameworkBundle:Redirect:urlRedirect</default>
+        <default key="route">{{ route_name_prefix }}_index</default>
+        <default key="permanent">true</default>
+    </route>
+
+    <route id="{{ route_name_prefix }}_index" pattern="/index">
+        <default key="_controller">{{ bundle }}:{{ entity }}:index</default>
+    </route>
+
+    <route id="{{ route_name_prefix }}_show" pattern="/{token}/show">
+        <default key="_controller">{{ bundle }}:{{ entity }}:show</default>
+    </route>
+
+{% if 'new' in actions %}
+    <route id="{{ route_name_prefix }}_new" pattern="/new">
+        <default key="_controller">{{ bundle }}:{{ entity }}:new</default>
+    </route>
+
+    <route id="{{ route_name_prefix }}_create" pattern="/create">
+        <default key="_controller">{{ bundle }}:{{ entity }}:create</default>
+        <requirement key="_method">post</requirement>
+    </route>
+{% endif %}
+
+{% if 'edit' in actions %}
+    <route id="{{ route_name_prefix }}_edit" pattern="/{token}/edit">
+        <default key="_controller">{{ bundle }}:{{ entity }}:edit</default>
+    </route>
+
+    <route id="{{ route_name_prefix }}_update" pattern="/{token}/update">
+        <default key="_controller">{{ bundle }}:{{ entity }}:update</default>
+        <requirement key="_method">post|put</requirement>
+    </route>
+{% endif %}
+
+{% if 'delete' in actions %}
+    <route id="{{ route_name_prefix }}_delete" pattern="/{token}/delete">
+        <default key="_controller">{{ bundle }}:{{ entity }}:delete</default>
+        <requirement key="_method">post|delete</requirement>
+    </route>
+{% endif %}
+{% endblock body %}
+
+</routes>

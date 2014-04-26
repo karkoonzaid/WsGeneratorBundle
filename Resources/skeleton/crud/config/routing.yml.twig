@@ -1,0 +1,44 @@
+{% if 'index' in actions %}
+{{ route_name_prefix }}:
+    pattern:  /
+    defaults: { _controller: FrameworkBundle:Redirect:redirect, route: {{ route_name_prefix }}, permanent: true }
+
+{{ route_name_prefix }}_index:
+    pattern:  /index
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:index" }
+{% endif %}
+
+{% if 'show' in actions %}
+{{ route_name_prefix }}_show:
+    pattern:  /{token}/show
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:show" }
+{% endif %}
+
+{% if 'new' in actions %}
+{{ route_name_prefix }}_new:
+    pattern:  /new
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:new" }
+
+{{ route_name_prefix }}_create:
+    pattern:  /create
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:create" }
+    requirements: { _method: post }
+{% endif %}
+
+{% if 'edit' in actions %}
+{{ route_name_prefix }}_edit:
+    pattern:  /{token}/edit
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:edit" }
+
+{{ route_name_prefix }}_update:
+    pattern:  /{token}/update
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:update" }
+    requirements: { _method: post|put }
+{% endif %}
+
+{% if 'delete' in actions %}
+{{ route_name_prefix }}_delete:
+    pattern:  /{token}/delete
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:delete" }
+    requirements: { _method: post|delete }
+{% endif %}

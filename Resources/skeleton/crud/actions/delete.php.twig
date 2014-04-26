@@ -1,0 +1,56 @@
+    /**
+{% block phpdoc_method_header %}
+     * Deletes a {{ entity }} entity.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/{token}", name="{{ route_name_prefix }}_delete")
+     * @Method("DELETE")
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function deleteAction(Request $request, $token)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $form = $this->createDeleteForm($token);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('{{ bundle }}:{{ entity }}')->findOneBy(array('token' => $token));
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find {{ entity }} entity.');
+            }
+
+            $em->remove($entity);
+            $em->flush();
+        }
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+{% endblock method_return %}
+    }
+
+{% block form %}
+    /**
+     * Creates a form to delete a {{ entity }} entity by id.
+     *
+     * @param mixed $token The entity token
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($token)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('{{ route_name_prefix }}_delete', array('token' => $token)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm()
+        ;
+    }
+{% endblock form %}
